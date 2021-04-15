@@ -18,7 +18,7 @@ conf = json.loads('''{
             "content": {
                 "msgtype": "text",
                 "text": {
-                    "content": "%s 更新了\\n%s"
+                    "content": "%s 更新啦\\n%s"
                 }
             }
         }
@@ -65,11 +65,11 @@ def main(item):
                 print(f"status_code: {r.status_code}")
                 print(r.text)
             else:
+                key = hashlib.md5(url.encode()).hexdigest()
                 md5 = hashlib.md5(r.content).hexdigest()
-                if cache.get(name) and cache[name] != md5:
+                if cache.get(key) and cache[key] != md5:
                     message(item, name, url)
-
-                cache[name] = md5
+                cache[key] = md5
 
         except Exception as e:
             logger.error(f"error fetch {url}")
