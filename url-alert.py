@@ -10,10 +10,10 @@ import os
 conf = json.loads('''{
     "items": [
         {
-            "urls": [
-                "http://httpbin.org/get"
+            "urls": {
+                "测试": "http://httpbin.org/get"
 
-            ],
+            },
             "webhook": "webhook",
             "content": {
                 "msgtype": "text",
