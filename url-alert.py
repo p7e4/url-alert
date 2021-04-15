@@ -18,7 +18,7 @@ conf = json.loads('''{
             "content": {
                 "msgtype": "text",
                 "text": {
-                    "content": "url更新提醒\\n%s"
+                    "content": "%s 更新了\\n%s"
                 }
             }
         }
@@ -52,7 +52,7 @@ else:
 
 
 def main(item):
-    for url in item["urls"]:
+    for name, url in item["urls"].items():
         try:
             if t:=item.get("headers"):
                 headers = t
@@ -66,10 +66,10 @@ def main(item):
                 print(r.text)
             else:
                 md5 = hashlib.md5(r.content).hexdigest()
-                if cache.get(url) and cache[url] != md5:
-                    message(item, url)
+                if cache.get(name) and cache[name] != md5:
+                    message(item, name, url)
 
-                cache[url] = md5
+                cache[name] = md5
 
         except Exception as e:
             logger.error(f"error fetch {url}")
