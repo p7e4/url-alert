@@ -52,12 +52,18 @@ else:
 
 
 def main(item):
-    for name, url in item["urls"].items():
+    for name, value in item["urls"].items():
+        time.sleep(0.5)
         try:
             if t:=item.get("headers"):
                 headers = t
             else:
                 headers = conf.get("headers")
+
+            if t:=item.get("urlf"):
+                url = t % value
+            else:
+                url = value
 
             r = requests.get(url, headers=headers)
             if r.status_code != 200:
@@ -67,14 +73,15 @@ def main(item):
             else:
                 key = hashlib.md5(url.encode()).hexdigest()
                 md5 = hashlib.md5(r.content).hexdigest()
+
                 if cache.get(key) and cache[key] != md5:
-                    message(item, name, url)
+                    message(item, name, value)
+
                 cache[key] = md5
 
         except Exception as e:
             logger.error(f"error fetch {url}")
             print(e)
-
 
 def message(item, *data):
     if t:=item.get("webhook"):
