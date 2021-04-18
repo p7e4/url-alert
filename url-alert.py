@@ -67,9 +67,7 @@ def main(item):
 
             r = requests.get(url, headers=headers)
             if r.status_code != 200:
-                logger.error(f"error fetch {url}")
-                print(f"status_code: {r.status_code}")
-                print(r.text)
+                logger.error(f"error fetch {url}\nstatus_code: {r.status_code}\n{r.text}")
             else:
                 key = hashlib.md5(url.encode()).hexdigest()
                 md5 = hashlib.md5(r.content).hexdigest()
@@ -80,8 +78,7 @@ def main(item):
                 cache[key] = md5
 
         except Exception as e:
-            logger.error(f"error fetch {url}")
-            print(e)
+            logger.error(f"error fetch {url}\n{e}")
 
 def message(item, *data):
     if t:=item.get("webhook"):
@@ -99,8 +96,7 @@ def message(item, *data):
 
     r = requests.post(webhook, json=content)
     if (r.json().get("code") and r.json().get("code") != 0) or (r.json().get("errcode") and r.json().get("errcode") != 0):
-        logger.error("发送消息错误:")
-        print(r.text)
+        logger.error(f"发送消息错误:\n{r.text}")
 
 
 if __name__ == '__main__':
